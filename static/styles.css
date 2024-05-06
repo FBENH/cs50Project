@@ -1,0 +1,11 @@
+.countdown {
+    width: 100%;
+    height: 20px;
+    background-color: #ccc;
+    animation: countdown 7s linear forwards;
+  }
+  
+  @keyframes countdown {
+    0% { width: 100%; }
+    100% { width: 0%; }
+  }

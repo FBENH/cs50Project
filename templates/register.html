@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <form action="/register" method="post">
+        <input type="text" autocomplete="off" autofocus placeholder="User Name" required name="user">
+        <input type="password" autocomplete="off" placeholder="Password" required name="password">
+        <input type="password" autocomplete="off" placeholder="Repeat Password" required name="repeated_password">
+        <button type="submit">Register</button>
+    </form>
+    <span>{{ error }}</span>
+{% endblock %}

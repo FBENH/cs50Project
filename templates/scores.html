@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <table>
+    <tr>
+        <th>#</th>
+        <th>User</th>
+        <th>Score</th>        
+        <th>Correct Answers</th> 
+    </tr>               
+        {% for score in scores %}
+            <tr>
+                <td>{{ score.index}}</td>            
+                <td>{{ score.userName }}</td>
+                <td>{{ score.score }}</td>                
+                <td>{{ score.totalCorrect }}</td>
+            </tr>
+        {% endfor %}
+        
+    </table>
+    {% if page > 1 %}
+        <a href="{{url_for('scores',page=page-1)}}">Previous</a>
+    {% endif %}
+    <span>Page:{{page}} of {{total_pages}}</span>
+    {% if page < total_pages %}
+        <a href="{{url_for('scores',page=page+1)}}">Next</a>
+    {% endif %}    
+{% endblock %}
+{% block javascript %}
+    
+{% endblock %}

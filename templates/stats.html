@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <div>
+        <h1>{{ userName }}</h1>
+    </div>
+    {% if stats %}
+    <div>
+        <div>Best score: {{ topScore.score }}</div>
+        <div> Easy category: {{ stats.easyCorrect }}/{{ stats.easyTotal }} Efficiency:(
+            {% if stats.easyTotal != 0 %}
+                {{"%.2f"|format((stats.easyCorrect / stats.easyTotal) * 100) }}%
+            {% else %}
+                N/A
+            {% endif %}
+        ) </div>
+        <div> Medium category: {{ stats.mediumCorrect }}/{{ stats.mediumTotal }} Efficiency:(
+            {% if stats.mediumTotal != 0 %}
+                {{ (stats.mediumCorrect / stats.mediumTotal) * 100 }}%
+            {% else %}
+                N/A
+            {% endif %}
+        ) </div>
+        <div> Hard category: {{ stats.hardCorrect }}/{{ stats.hardTotal }} Efficiency:(
+            {% if stats.hardTotal != 0 %}
+                {{ (stats.hardCorrect / stats.hardTotal) * 100 }}%
+            {% else %}
+                N/A
+            {% endif %}
+        ) </div>
+    </div>
+    <div>
+        <a href="/user_games">My games</a>
+    </div>
+    {% else %}
+    <div>
+        <p>Play a game to have stats to show!</p>
+    </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/scores">Top Scores</a></li>
+            <li><a href="/play">Play</a></li>            
+            {% if not session["userName"] %}
+            <li><a href="/register">Register</a></li>
+            <li><a href="/login">Log In</a></li>
+            {% endif %}
+            {% if session["userName"] %}
+            <li><a href="/stats">{{ session["userName"] }}</a></li>
+            <li><a href="/logout">Log out</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div>
+        {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning" id="flashed_messages">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    </div>
+    <main>
+        {% block main %}{% endblock %}
+    </main>
+    <footer>
+
+    </footer>
+    {% block javascript %}
+        <script>
+            setTimeout(function(){
+                let flashedMessages = document.getElementById("flashed_messages");
+                if (flashedMessages){
+                    flashedMessages.remove();
+                }
+            }, 1500)
+        </script>
+    {% endblock %}
+</body>
+</html>

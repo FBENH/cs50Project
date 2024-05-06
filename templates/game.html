@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <span id="userName" hidden>{{ session["userName"] }}</span>
+    <div>
+        <div><span id="points"></span></div>
+        <div><span id="difficulty"></span></div>
+        <div><span id="lives"></span></div>
+    </div>
+    <div>
+        <div>
+            <span id="question"></span>
+        </div>
+        <div id="answers-container">  
+            
+        </div>
+    </div>
+    <div id="countdown" class="countdown"></div>   
+{% endblock %}
+{% block javascript %}
+    <script src="{{ url_for('static', filename='game.js') }}"> </script>
+{% endblock %}
