@@ -1,23 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trivia</title>
-    <link rel="stylesheet" href="static/styles.css">
+    {% block styles %}    
+    <link href="{{ url_for('static', filename='tailwind.css') }}" rel="stylesheet">
+    {% endblock %}
 </head>
-<body>
-    <nav>
+<body>      
+    <nav class="fixed top-0 left-0 h-screen w-16 m-0 flex flex-col bg-gray-950 text-white shadow-lg">
         <ul>
-            <li><a href="/scores">Top Scores</a></li>
-            <li><a href="/play">Play</a></li>            
+            <li>
+                <div class="sidebar-icon group">
+                    <a href="/scores"><i class="sidebar-icon fa-solid fa-medal"></i></a>
+                    <span class="sidebar-tooltip group-hover:scale-100">Top scores</span>
+                </div>                
+            </li>
+            <li>
+                <div class="sidebar-icon group">
+                    <a href="/play"><i class="fa-solid fa-play"></i></a>
+                    <span class="sidebar-tooltip group-hover:scale-100">Play</span>
+                </div>                                
+            </li>            
             {% if not session["userName"] %}
-            <li><a href="/register">Register</a></li>
-            <li><a href="/login">Log In</a></li>
+            <li>
+                <div class="sidebar-icon group">
+                    <a href="/register"><i class="fa-solid fa-plus"></i></a>
+                    <span class="sidebar-tooltip group-hover:scale-100">Register</span>
+                </div>                
+            </li>
+            <li>
+                <div class="sidebar-icon group">
+                    <a href="/login"><i class="fa-solid fa-user"></i></a>
+                    <span class="sidebar-tooltip group-hover:scale-100">Log In</span>
+                </div>                
+            </li>
             {% endif %}
             {% if session["userName"] %}
-            <li><a href="/stats">{{ session["userName"] }}</a></li>
-            <li><a href="/logout">Log out</a></li>
+            <li>
+                <div class="sidebar-icon group">
+                    <i class="fa-solid fa-trophy"><a href="/stats">{{ session["userName"] }}</a></i>
+                    <span class="sidebar-tooltip group-hover:scale-100">tooltip</span>
+                </div>                
+            </li>
+            <li>
+                <div class="sidebar-icon group">
+                    <i class="fa-solid fa-right-from-bracket"><a href="/logout">Log out</a></i>
+                    <span class="sidebar-tooltip group-hover:scale-100">tooltip</span>
+                </div>                
+            </li>
             {% endif %}
         </ul>
     </nav>
