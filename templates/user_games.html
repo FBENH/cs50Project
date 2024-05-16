@@ -1,27 +1,58 @@
 {% extends "layout.html" %}
+{% block styles %}
+<link href="{{ url_for('static', filename='tailwind.css') }}" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	rel="stylesheet">
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block main %}
-    <table>
-    <tr>
-        <th>#</th>        
-        <th>Score</th>        
-        <th>Correct Answers</th> 
-    </tr>           
-        {% for game in games %}
-            <tr>
-                <td>{{ game.index }}</td>              
-                <td>{{ game.score }}</td>                
-                <td>{{ game.totalCorrect }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-    {% if page > 1 %}
-        <a href="{{url_for('user_games',page=page-1)}}">Previous</a>
-    {% endif %}
-    <span>Page:{{page}} of {{total_pages}}</span>
-    {% if page < total_pages %}
-        <a href="{{url_for('user_games',page=page+1)}}">Next</a>
-    {% endif %}    
+<div class="flex items-center justify-center min-h-screen bg-gray-900">    
+	<div class="col-span-12">
+        <h1 class="text-xl font-bold text-white text-center">My games</h1>
+		<div class="overflow-auto lg:overflow-visible ">
+			<table class="table text-gray-400 border-separate space-y-6 text-sm">
+				<thead class="bg-gray-800 text-gray-500">
+					<tr>
+						<th class="p-3">🏆</th>						
+						<th class="p-3 text-left">Score</th>
+						<th class="p-3 text-left">Correct Answers</th>						
+					</tr>
+				</thead>
+				<tbody>
+                    {% for game in games %}
+					<tr class="bg-gray-800">
+						<td class="p-3">
+							<div class="flex align-items-center">
+								<img class="rounded-full h-12 w-12  object-cover" src="https://www.svgrepo.com/show/101194/smiling-face.svg" alt="unsplash image">
+								<div class="ml-3">
+									<div class="font-bold">{{ game.index }}</div>									
+								</div>
+							</div>
+						</td>						
+						<td class="p-3 font-bold">
+							{{ game.score }}
+						</td>
+						<td class="p-3">
+							{{ game.totalCorrect }}
+						</td>						
+					</tr>
+                    {% endfor %}					
+				</tbody>
+			</table>
+            <div class="justify-center text-center text-gray-400">
+                {% if page > 1 %}
+                    <a href="{{url_for('user_games',page=page-1)}}" class="font-bold">Previous</a>
+                {% endif %}
+                    <span>Page:{{page}} of {{total_pages}}</span>
+                {% if page < total_pages %}
+                    <a href="{{url_for('user_games',page=page+1)}}" class="font-bold">Next</a>
+                {% endif %}
+            </div>
+		</div>
+	</div>
+</div>    
 {% endblock %}
 {% block javascript %}
     

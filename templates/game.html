@@ -2,20 +2,28 @@
 
 {% block main %}
     <span id="userName" hidden>{{ session["userName"] }}</span>
-    <div>
-        <div><span id="points"></span></div>
-        <div><span id="difficulty"></span></div>
-        <div><span id="lives"></span></div>
-    </div>
-    <div>
+    <div class="flex flex-col justify-center items-center h-full">
+        <div class="text-white top-0 fixed pt-5">
+            <div><span id="points"></span></div>
+            <div><span id="difficulty"></span></div>
+            <div><span id="lives"></span></div>
+        </div>
+        <div id="loading" class="loading active">            
+            <!-- Loading animation -->
+            <div class="spinner"></div>
+          </div>
         <div>
-            <span id="question"></span>
+            <div class="m-2 p-2 text-xl bg-white border-2 border-solid border-black h-40 rounded-lg scale-0" id="question-container">
+                <span id="question"></span>
+            </div>
+            <div id="answers-container">  
+                
+            </div>
         </div>
-        <div id="answers-container">  
-            
-        </div>
+        <div id="countdown" class="countdown scale-0"></div>
     </div>
-    <div id="countdown" class="countdown"></div>   
+    <audio src="" id="sound"></audio>
+       
 {% endblock %}
 {% block javascript %}
     <script src="{{ url_for('static', filename='game.js') }}"> </script>

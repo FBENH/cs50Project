@@ -17,16 +17,70 @@
     text-xs font-bold
     transition-all duration-100 scale-0 origin-left;
   }
+
+  .display-row{
+    @apply p-3 border-solid border-2 border-black w-32;
+  }
 }
+
+html{
+  margin: 0px;
+  padding: 0px;
+}
+
+.table {
+  border-spacing: 0 15px;
+}
+
+i {
+  font-size: 1rem !important;
+}
+
+.table tr {
+  border-radius: 20px;
+}
+
+tr td:nth-child(n+5),
+tr th:nth-child(n+5) {
+  border-radius: 0 .625rem .625rem 0;
+}
+
+tr td:nth-child(1),
+tr th:nth-child(1) {
+  border-radius: .625rem 0 0 .625rem;
+}
+
 .countdown {
-    width: 100%;
+    width: 50%;
     height: 20px;
     background-color: #ccc;
-    animation: countdown 7s linear forwards;
+    animation: countdown 10s linear forwards;
   }
 
   
   @keyframes countdown {
     0% { width: 100%; }
     100% { width: 0%; }
+  }
+
+  .loading {
+    display: none; /* Initially hide the loading animation */
+  }
+  .loading.active {
+    display: block; /* Display the loading animation when active */
+  }
+
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #4299e1; /* Change color here */
+    border-radius: 50%;
+    width: 50px; /* Change size here */
+    height: 50px; /* Change size here */
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
   }

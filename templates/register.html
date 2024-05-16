@@ -1,11 +1,25 @@
 {% extends "layout.html" %}
 
 {% block main %}
-    <form action="/register" method="post">
-        <input type="text" autocomplete="off" autofocus placeholder="User Name" required name="user">
-        <input type="password" autocomplete="off" placeholder="Password" required name="password">
-        <input type="password" autocomplete="off" placeholder="Repeat Password" required name="repeated_password">
-        <button type="submit">Register</button>
-    </form>
-    <span>{{ error }}</span>
+<div class="h-screen bg-gray-900 flex justify-center items-center">
+	<div class="lg:w-2/5 md:w-1/2 w-2/3">
+		<form class="bg-gray-950 p-10 rounded-lg shadow-lg min-w-full" action="/register" method="post">
+			<h1 class="text-center text-2xl mb-6 text-white font-bold font-sans">Register</h1>
+			<div>
+				<label class="text-white font-semibold block my-3 text-md" for="username">Username</label>
+				<input class="w-full bg-black px-4 py-2 rounded-lg focus:outline-none text-white" type="text" name="user" id="username" placeholder="User name" required autocomplete="off" />
+            </div>				
+			<div>
+				<label class="text-white font-semibold block my-3 text-md" for="password">Password</label>
+				<input class="w-full bg-black text-white px-4 py-2 rounded-lg focus:outline-none" type="password" name="password" id="password" placeholder="Password" required autocomplete="off"/>
+            </div>
+			<div>
+				<label class="text-white font-semibold block my-3 text-md" for="confirm">Confirm password</label>
+				<input class="w-full bg-black text-white px-4 py-2 rounded-lg focus:outline-none" type="password" name="repeated_password" id="confirm" placeholder="Confirm password" required autocomplete="off" />
+            </div>
+			<button type="submit" class="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">Register</button>			
+            <div class="text-center"><span class="text-red-700">{{ error }}</span></div>
+		</form>
+	</div>
+</div>    
 {% endblock %}

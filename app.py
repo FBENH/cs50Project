@@ -20,7 +20,8 @@ db = SQL("sqlite:///trivia.db")
 
 @app.route("/", methods=["GET","POST"])
 def hello_world():
-    return render_template("layout.html")
+    userName = session.get("userName")
+    return render_template("landing.html", userName=userName)
 
 @app.route("/register", methods=["GET","POST"])
 def register():
@@ -45,6 +46,7 @@ def register():
         except:
             return render_template("register.html",error="Error in register")
         flash("Register successful")
+        session["userName"] = userName
         return redirect("/")
     
 @app.route("/login",methods=["GET","POST"])
@@ -73,10 +75,8 @@ def play():
     return render_template("game.html",userName = userName)
 
 @app.route("/EndGame", methods= ["POST"])
-def EndGame():
-    # Access JSON data sent in the POST request body    
-    data = request.json
-    # Process the received data as needed
+def EndGame():       
+    data = request.json    
     if data is not None:
         points = data['points']
         easy_correct = data['easyCorrect']
@@ -118,15 +118,18 @@ def scores():
 @app.route("/stats")
 def stats():
     userName = session.get("userName")
-    stats = db.execute("SELECT SUM(easyCorrect) as easyCorrect, SUM(easyTotal) as easyTotal, \
-                       SUM(mediumCorrect) as mediumCorrect, SUM(mediumTotal) as mediumTotal, \
-                       SUM(hardCorrect) as hardCorrect, SUM(hardTotal) as hardTotal \
-                       FROM STATS WHERE userName = ?",userName)
-    topScore = db.execute("SELECT score FROM games WHERE userName = ? ORDER BY score DESC, date ASC LIMIT 1",userName)
-    if stats:
-        return render_template("stats.html",stats=stats[0],userName=userName,topScore=topScore[0])
+    if userName:
+        stats = db.execute("SELECT SUM(easyCorrect) as easyCorrect, SUM(easyTotal) as easyTotal, \
+                        SUM(mediumCorrect) as mediumCorrect, SUM(mediumTotal) as mediumTotal, \
+                        SUM(hardCorrect) as hardCorrect, SUM(hardTotal) as hardTotal \
+                        FROM STATS WHERE userName = ?",userName)
+        topScore = db.execute("SELECT score FROM games WHERE userName = ? ORDER BY score DESC, date ASC LIMIT 1",userName)    
+        if stats[0]["easyCorrect"] is not None:
+            return render_template("stats.html",stats=stats[0],userName=userName,topScore=topScore[0])
+        else:
+            return render_template("stats.html",userName=userName)
     else:
-        return render_template("stats.html",userName=userName)
+        return redirect("/")
     
 @app.route("/user_games")
 def user_games():
@@ -135,13 +138,15 @@ def user_games():
     for index, game in enumerate(user_games, start=1):
         game['index'] = index
     page = request.args.get('page',1,type=int)
-    per_page = 10
+    per_page = 5
     start = (page - 1) * per_page
     end = start + per_page
     total_pages = (len(user_games) + per_page - 1) // per_page
-    games_on_page = user_games[start:end]
-    if user_games:
+    games_on_page = user_games[start:end]    
+    if games_on_page:
         return render_template("user_games.html",games = games_on_page,total_pages=total_pages,page=page)
+    else:
+        return redirect("/stats")
 
     
     

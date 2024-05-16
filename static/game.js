@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Your code here
     let lives = 3
     let points = 0
     let easyCorrect = 0
@@ -13,10 +12,12 @@ document.addEventListener("DOMContentLoaded", function() {
     const mediumValue = 150
     const hardValue = 200
 
+    let questionContainer = document.getElementById("question-container");
+    let countdown = document.getElementById('countdown');    
+    let loadingElement = document.getElementById("loading");
     
 
-
-    async function fetchQuestions(amount, token) {
+    async function fetchQuestions(amount, token) {        
         let url = `https://opentdb.com/api.php?amount=${amount}&encode=base64`;
         
         // If token is provided, append it to the URL
@@ -24,9 +25,10 @@ document.addEventListener("DOMContentLoaded", function() {
             url += `&token=${token}`;
         }
         
-        try {
+        try {            
             const response = await fetch(url);
             const data = await response.json();
+            loadingElement.classList.remove("active");
             return data;
         } catch (error) {
             console.error('Error fetching questions:', error);
@@ -45,12 +47,18 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function resetCountdownAnimation() {
-        let countdown = document.getElementById('countdown');
+    function resetCountdownAnimation() {        
         countdown.classList.remove('countdown');
+        countdown.classList.remove('scale-0');
         void countdown.offsetWidth; // Trigger reflow
-        countdown.classList.add('countdown');
-    }    
+        countdown.classList.add('countdown','m-2','p-2');
+    }
+    
+    function playSound(name){
+        let audio = document.getElementById("sound");
+        audio.src = `../static/${name}.mp3`;
+        audio.play();
+    }
 
     async function startGame() {
         let token = await retrieveToken();
@@ -72,7 +80,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         break;
                     }
                     
-                    question.innerText = atob(questions.results[i].question);
+                    question.innerText = atob(questions.results[i].question);                    
+                    questionContainer.classList.remove("scale-0");
                     // Get the possible answers array
                     let possibleAnswers = [
                         questions.results[i].correct_answer,
@@ -89,12 +98,14 @@ document.addEventListener("DOMContentLoaded", function() {
                         answerContainer.appendChild(answerElement)                        
                         container.appendChild(answerContainer)
                         answerElement.innerText = atob(possibleAnswers[j]);
-                        let difficulty = atob(questions.results[i].difficulty)
+                        let difficulty = atob(questions.results[i].difficulty);
+                        answerContainer.classList.add("bg-white", "p-2", "m-2","rounded-lg");
+                        answerContainer.style.cursor = "pointer";
 
                         answerContainer.addEventListener('click',function(){
                             if (answerElement.innerText === atob(questions.results[i].correct_answer)){
                                 console.log('Correct!');
-                                
+                                playSound("Correct");
                                 switch(difficulty){
                                     case "easy":
                                         points += easyValue
@@ -114,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 }
                             } else{
                                 console.log("Incorrect!");
+                                playSound("Wrong");
                                 switch(difficulty){
                                     case "easy":                                        
                                         easyTotal += 1
@@ -136,11 +148,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         let livesText = "LIVES: "
                         for (let i = 0; i < lives; i++){
-                            livesText += "*"
+                            livesText += '❤️'
                         }                   
                         livesContainer.innerText = livesText
 
-                        let difficultyText = atob(questions.results[i].difficulty)                        
+                        let difficultyText = atob(questions.results[i].difficulty).toUpperCase();                      
                         difficultyContainer.innerText = `DIFFICULTY: ${difficultyText}`                        
                         
                         resetCountdownAnimation();
@@ -202,18 +214,20 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
                 // Resolve with a special value indicating timeout
                 resolve('timeout');
-            }, 7000); // 7 seconds
+            }, 10000); // 7 seconds
         });
     }
 
     async function endGame() {
         let container = document.getElementById("answers-container")
         let userName = document.getElementById("userName").innerText;
-        console.log(userName)
+        questionContainer.classList.add("hidden");
+        countdown.classList.add("hidden");
         if (userName){
             let button = document.createElement("button");
             button.innerText = "Submit Score";
             button.type = "button";
+            button.classList.add("m-4","p-4","text-xl","bg-indigo-600","rounded-lg","text-white","font-bold")
             // Set the button's onclick event to send data to the '/EndGame' route
             button.onclick = function() {
                 sendData();
@@ -222,9 +236,10 @@ document.addEventListener("DOMContentLoaded", function() {
             container.appendChild(button);
         }
         else{
-            let p = document.createElement("p")
-            p.innerText = "You have to be signed in to submit a score"
-            container.appendChild(p)
+            let span = document.createElement("span")
+            span.innerText = "You have to be signed in to submit a score"
+            span.classList.add("text-lg","text-white","font-bold")
+            container.appendChild(span)
         }
         
     
@@ -249,11 +264,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     },
                     body: JSON.stringify(data)
                 });
-                if (response.ok) {
-                    // Redirect to the specified URL
-                    window.location.href = "/";
-                } else {
-                    // Handle other response statuses (e.g., 4xx, 5xx)
+                if (response.ok) {                    
+                    window.location.href = "/stats";
+                } else {                    
                     console.error('Error:', response.statusText);
                     window.location.href = "/";
                 }                

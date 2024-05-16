@@ -1,45 +1,80 @@
 {% extends "layout.html" %}
 
 {% block main %}
-    <div>
-        <h1>{{ userName }}</h1>
+    <div class="text-white text-lg p-3 m-3 flex flex-col justify-center items-center">
+        <div>
+            <h1 class="font-bold text-xl p-3 m-3">{{ userName }}</h1>
+        </div>
+        {% if stats %}
+        <div class="p-3 m-3 text-center">
+            <div><span class="font-bold">Best</span> score 🏆 <span class="font-bold">{{ topScore.score }}</span> POINTS!</div>
+            <h2 class="p-2 m-2 font-bold text-center">Performance</h2>
+            <div class="p-2 m-2"> <span class="font-bold">Easy</span> category: {{ stats.easyCorrect }}/{{ stats.easyTotal }} 
+                {% if stats.easyTotal != 0 %}
+                    <span id="easyPercentage" class="hidden">{{ "%.2f"|format((stats.easyCorrect / stats.easyTotal) * 100) }}</span>
+                    <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                        <div id="easyBar" class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
+                    </div>
+                {% else %}
+                    N/A
+                {% endif %}
+            </div>            
+            <div class="p-2 m-2"><span class="font-bold">Medium</span> category: {{ stats.mediumCorrect }}/{{ stats.mediumTotal }}
+                {% if stats.mediumTotal != 0 %}
+                    <span id="mediumPercentage" class="hidden">{{ "%.2f"|format((stats.mediumCorrect / stats.mediumTotal) * 100) }}</span>
+                    <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                        <div id="mediumBar" class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
+                    </div>
+                {% else %}
+                    N/A
+                {% endif %}
+            </div>
+            <div class="p-2 m-2"><span class="font-bold">Hard</span> category: {{ stats.hardCorrect }}/{{ stats.hardTotal }}
+                {% if stats.hardTotal != 0 %}
+                    <span id="hardPercentage" class="hidden">{{ "%.2f"|format((stats.hardCorrect / stats.hardTotal) * 100) }}</span>
+                    <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                        <div id="hardBar" class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
+                    </div>
+                {% else %}
+                    N/A
+                {% endif %}
+            </div>
+        </div>
+        <div>            
+            <a href="/user_games" type="button" class="font-bold bg-indigo-600 rounded-xl p-2">My games</a>
+        </div>
+        {% else %}
+        <div>
+            <p>Play a game and submit a score to have stats to show!</p>
+        </div>
+        {% endif %}
     </div>
-    {% if stats %}
-    <div>
-        <div>Best score: {{ topScore.score }}</div>
-        <div> Easy category: {{ stats.easyCorrect }}/{{ stats.easyTotal }} Efficiency:(
-            {% if stats.easyTotal != 0 %}
-                {{"%.2f"|format((stats.easyCorrect / stats.easyTotal) * 100) }}%
-            {% else %}
-                N/A
-            {% endif %}
-        ) </div>
-        <div> Medium category: {{ stats.mediumCorrect }}/{{ stats.mediumTotal }} Efficiency:(
-            {% if stats.mediumTotal != 0 %}
-                {{ (stats.mediumCorrect / stats.mediumTotal) * 100 }}%
-            {% else %}
-                N/A
-            {% endif %}
-        ) </div>
-        <div> Hard category: {{ stats.hardCorrect }}/{{ stats.hardTotal }} Efficiency:(
-            {% if stats.hardTotal != 0 %}
-                {{ (stats.hardCorrect / stats.hardTotal) * 100 }}%
-            {% else %}
-                N/A
-            {% endif %}
-        ) </div>
-    </div>
-    <div>
-        <a href="/user_games">My games</a>
-    </div>
-    {% else %}
-    <div>
-        <p>Play a game to have stats to show!</p>
-    </div>
-    {% endif %}
-
 {% endblock %}
 
 {% block javascript %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let easyBar = document.getElementById("easyBar");
+            let easyPercent = document.getElementById("easyPercentage").innerText;            
+            // Retrieve the numerical value from the data-value attribute
+            let numericalValue = parseFloat(easyPercent);            
+            easyBar.style.width = numericalValue + "%";
+            easyBar.innerText = numericalValue + "%";
 
+            let mediumBar = document.getElementById("mediumBar");
+            let mediumPercent = document.getElementById("mediumPercentage").innerText;            
+            // Retrieve the numerical value from the data-value attribute
+            numericalValue = parseFloat(mediumPercent);            
+            mediumBar.style.width = numericalValue + "%";
+            mediumBar.innerText = numericalValue + "%";
+
+            let hardBar = document.getElementById("hardBar");
+            let hardPercent = document.getElementById("hardPercentage").innerText;            
+            // Retrieve the numerical value from the data-value attribute
+            numericalValue = parseFloat(hardPercent);            
+            hardBar.style.width = numericalValue + "%";
+            hardBar.innerText = numericalValue + "%";
+
+    });
+    </script>
 {% endblock %}

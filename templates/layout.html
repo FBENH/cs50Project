@@ -9,62 +9,57 @@
     <link href="{{ url_for('static', filename='tailwind.css') }}" rel="stylesheet">
     {% endblock %}
 </head>
-<body>      
-    <nav class="fixed top-0 left-0 h-screen w-16 m-0 flex flex-col bg-gray-950 text-white shadow-lg">
-        <ul>
-            <li>
-                <div class="sidebar-icon group">
-                    <a href="/scores"><i class="sidebar-icon fa-solid fa-medal"></i></a>
-                    <span class="sidebar-tooltip group-hover:scale-100">Top scores</span>
-                </div>                
-            </li>
-            <li>
-                <div class="sidebar-icon group">
-                    <a href="/play"><i class="fa-solid fa-play"></i></a>
-                    <span class="sidebar-tooltip group-hover:scale-100">Play</span>
-                </div>                                
-            </li>            
-            {% if not session["userName"] %}
-            <li>
-                <div class="sidebar-icon group">
-                    <a href="/register"><i class="fa-solid fa-plus"></i></a>
-                    <span class="sidebar-tooltip group-hover:scale-100">Register</span>
-                </div>                
-            </li>
-            <li>
-                <div class="sidebar-icon group">
-                    <a href="/login"><i class="fa-solid fa-user"></i></a>
-                    <span class="sidebar-tooltip group-hover:scale-100">Log In</span>
-                </div>                
-            </li>
-            {% endif %}
-            {% if session["userName"] %}
-            <li>
-                <div class="sidebar-icon group">
-                    <i class="fa-solid fa-trophy"><a href="/stats">{{ session["userName"] }}</a></i>
-                    <span class="sidebar-tooltip group-hover:scale-100">tooltip</span>
-                </div>                
-            </li>
-            <li>
-                <div class="sidebar-icon group">
-                    <i class="fa-solid fa-right-from-bracket"><a href="/logout">Log out</a></i>
-                    <span class="sidebar-tooltip group-hover:scale-100">tooltip</span>
-                </div>                
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    <div>
-        {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning" id="flashed_messages">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
-    </div>
-    {% endfor %}
-    </div>
-    <main>
-        {% block main %}{% endblock %}
-    </main>
+<body>
+    <div class="flex">
+        <nav class="min-h-screen w-16 m-0 bg-gray-950 text-white shadow-lg items-center justify-center">
+            <ul>
+                <li>
+                    <a href="/scores"><div class="sidebar-icon group">
+                        <i class="fa-solid fa-medal"></i>
+                        <span class="sidebar-tooltip group-hover:scale-100">Top scores</span>
+                    </div></a>     
+                </li>
+                <li>
+                    <a href="/play"><div class="sidebar-icon group">
+                        <i class="fa-solid fa-play"></i>
+                        <span class="sidebar-tooltip group-hover:scale-100">Play</span>
+                    </div></a>                                
+                </li>            
+                {% if not session["userName"] %}
+                <li>
+                    <a href="/register"><div class="sidebar-icon group">
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="sidebar-tooltip group-hover:scale-100">Register</span>
+                    </div></a>                
+                </li>
+                <li>
+                    <a href="/login"><div class="sidebar-icon group">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="sidebar-tooltip group-hover:scale-100">Log In</span>
+                    </div></a>               
+                </li>
+                {% endif %}
+                {% if session["userName"] %}
+                <li>
+                    <a href="/stats"><div class="sidebar-icon group">
+                        <i class="fa-solid fa-trophy"></i>
+                        <span class="sidebar-tooltip group-hover:scale-100">{{ session["userName"] }}</span>
+                    </div></a>              
+                </li>
+                <li>
+                    <a href="/logout"><div class="sidebar-icon group">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="sidebar-tooltip group-hover:scale-100">Log out</span>
+                    </div></a>                
+                </li>
+                {% endif %}
+            </ul>
+        </nav>        
+        <main class="bg-gray-900 w-full">
+            {% block main %}{% endblock %}
+        </main>
+    </div>    
+    
     <footer>
 
     </footer>
